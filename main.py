@@ -1,11 +1,15 @@
 from fastapi import FastAPI
 
+from middlewares.error_handler import ErrorHandler
+
 from db.config import engine, Base
 from db.models import Candidates, Brands, Offices
 
 from router.candidates_router import candidates_router
 
 app = FastAPI()
+
+app.add_middleware(ErrorHandler)
 
 app.include_router(candidates_router)
 

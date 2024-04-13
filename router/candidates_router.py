@@ -12,5 +12,4 @@ def get_candidates_try(new_candidate: NewCandidate):
     candidate = new_candidate.candidate
     brand = new_candidate.brand
     office = new_candidate.office
-    response = cretate_new_candidate(brand=brand, office=office, candidate=candidate)
-    return JSONResponse(status_code=200, content={'response' : response})
+    return cretate_new_candidate(brand=brand, office=office, candidate=candidate)

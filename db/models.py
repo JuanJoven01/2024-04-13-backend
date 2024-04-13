@@ -15,7 +15,7 @@ class Candidates(Base):
     office: Mapped["Offices"] = relationship(back_populates="candidates")
     
     def __repr__(self) -> str:
-        return f"User(id={self.id!r}, username={self.username!r})"
+        return f"Candidates(id={self.id!r}, name={self.name!r}, brand_id={self.brand_id!r}, office_id={self.office_id!r})"
 
 class Brands(Base): 
     __tablename__ = "brands"
@@ -25,7 +25,7 @@ class Brands(Base):
     candidates: Mapped[List["Candidates"]] = relationship(back_populates="brand", cascade="all, delete-orphan")
     
     def __repr__(self) -> str:
-        return f"User(id={self.id!r}, username={self.username!r})"
+        return f"Brands(id={self.id!r}, name={self.name!r})"
     
 class Offices(Base):
     __tablename__ = "offices"
@@ -35,5 +35,5 @@ class Offices(Base):
     candidates: Mapped[List["Candidates"]] = relationship(back_populates="office", cascade="all, delete-orphan")
 
     def __repr__(self) -> str:
-        return f"User(id={self.id!r}, username={self.username!r})"
+        return f"Offices(id={self.id!r}, name={self.name!r})"
     
