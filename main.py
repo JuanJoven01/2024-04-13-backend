@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 
 from db.config import engine, Base
+from db.models import Candidates, Brands, Offices
 
 app = FastAPI()
 
