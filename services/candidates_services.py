@@ -3,7 +3,7 @@ from sqlalchemy import select
 from db.models import Candidates, Brands, Offices
 from db.config import Session
 
-def cretate_new_candidate(brand: str, office:str, candidate: str):
+def create_new_candidate(brand: str, office:str, candidate: str):
     '''
     This function receives a necessary data to create a new candidate, but fst, verify if brand or office exist to
     avoid duplicated registers on the db
@@ -24,10 +24,30 @@ def cretate_new_candidate(brand: str, office:str, candidate: str):
                                    )
         session.add(new_candidate)
         session.commit()
-    return JSONResponse(status_code=201, content={'response' : __find_candidate_per_name(candidate_name=candidate.strip())})
+    return __find_candidate_per_name(candidate_name=candidate.strip())
+
+def get_all_the_candidates():
+    with Session() as session:
+        smtp = select(Candidates).join(Brands).join(Offices)
+        all_candidates = session.execute(smtp).scalars().all()
+        candidates_as_dict = []
+        for candidate in all_candidates:
+            candidates_as_dict.append(
+                {
+                    'id': candidate.id,
+                    'name': candidate.name,
+                    'brand': candidate.brand.name,
+                    'office': candidate.office.name
+                }
+            )
+        return candidates_as_dict
 
 
 def __find_candidate_per_name(candidate_name: str):
+    '''
+    receives an candidate name and find the exact coincidences on the db,
+    return the last coincidence
+    '''
     with Session() as session:
         smtp = select(Candidates).where(Candidates.name == candidate_name)
         query_candidate = session.execute(smtp).scalars().all()
