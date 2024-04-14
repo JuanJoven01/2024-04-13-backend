@@ -6,7 +6,9 @@ from db.config import Session
 def create_new_candidate(brand: str, office:str, candidate: str):
     '''
     This function receives a necessary data to create a new candidate, but fst, verify if brand or office exist to
-    avoid duplicated registers on the db
+    avoid duplicated registers on the db, created the user and
+    return the user data
+    
     '''
 
     db_brand = __verify_if_brand_exist(brand_name= brand)
@@ -26,7 +28,51 @@ def create_new_candidate(brand: str, office:str, candidate: str):
         session.commit()
     return __find_candidate_per_name(candidate_name=candidate.strip())
 
+def update_the_candidate(uid: int,brand: str, office:str, candidate: str):
+    '''
+    This function receives a necessary data to update a candidate, but fst, verify if brand or office exist to
+    avoid duplicated registers on the db, update the user and
+    return the user data
+    '''
+
+    db_brand = __verify_if_brand_exist(brand_name= brand)
+    if not db_brand:
+        db_brand = __create_a_new_brand(brand_name=brand)
+
+    db_office = __verify_if_office_exist(office_name=office)
+    if not db_office:
+        db_office = __create_a_new_office(office_name=office)
+
+    with Session() as session:
+        smtp = select(Candidates).where(Candidates.id == uid)
+        db_candidate = session.execute(smtp).scalar()
+        db_candidate.name = candidate
+        db_candidate.brand_id = db_brand.id
+        db_candidate.office_id = db_office.id
+        session.commit()
+        smtp = select(Candidates).where(Candidates.id == uid)
+        db_candidate = session.execute(smtp).scalar()
+        return db_candidate
+
+
+def delete_a_candidate(uid:int):
+    '''
+    find a candidate on the db and remove that
+    return a string if deleted successful
+    '''
+    with Session() as session:
+        smtp = select(Candidates).where(Candidates.id == uid)
+        to_delete = session.execute(smtp).scalar()
+        session.delete(to_delete)
+        session.commit()
+    return 'User deleted'
+
+
 def get_all_the_candidates():
+    '''
+    Get all the candidates joined with offices and brands,
+    return a list with a dictionary for any candidate registered
+    '''
     with Session() as session:
         smtp = select(Candidates).join(Brands).join(Offices)
         all_candidates = session.execute(smtp).scalars().all()

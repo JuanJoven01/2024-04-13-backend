@@ -14,3 +14,20 @@ class NewCandidate (BaseModel):
                     "candidate": "David Sandoval",
                 }
             }
+
+class UpdateCandidate (BaseModel):
+    uid: int 
+    brand: str = Field(min_length=1, max_length=20)
+    office: str = Field(min_length=4, max_length=20)
+    candidate: str = Field(min_length=4, max_length=30)
+
+    class Config:
+            orm_mode = True
+            schema_extra = {
+                "example": {
+                    "uid": 1,
+                    "brand": "Mazda",
+                    "office": "Chapinero",
+                    "candidate": "David Sandoval",
+                }
+            }
