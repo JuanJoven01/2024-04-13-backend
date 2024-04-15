@@ -1,5 +1,7 @@
 from fastapi import FastAPI
 
+from fastapi.middleware.cors import CORSMiddleware
+
 from middlewares.error_handler import ErrorHandler
 
 from db.config import engine, Base
@@ -10,6 +12,13 @@ from router.candidates_router import candidates_router
 app = FastAPI()
 
 app.add_middleware(ErrorHandler)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(candidates_router)
 
