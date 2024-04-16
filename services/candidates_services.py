@@ -52,7 +52,12 @@ def update_the_candidate(uid: int,brand: str, office:str, candidate: str):
         session.commit()
         smtp = select(Candidates).where(Candidates.id == uid)
         db_candidate = session.execute(smtp).scalar()
-        return db_candidate
+        return {
+        'id': db_candidate.id,
+        'name': db_candidate.name,
+        'brand_id': db_candidate.brand_id,
+        'office_id': db_candidate.office_id
+        }
 
 
 def delete_a_candidate(uid:int):
