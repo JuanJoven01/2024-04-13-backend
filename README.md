@@ -37,5 +37,9 @@ Just need to run:
 Just need to run:
     uvicorn main:app --host 0.0.0.0
 
+### API documentation on 
+    host/docs
+
+
 
 
