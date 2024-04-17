@@ -1,5 +1,8 @@
 from fastapi import FastAPI
 
+import os
+from dotenv import load_dotenv
+
 from fastapi.middleware.cors import CORSMiddleware
 
 from middlewares.error_handler import ErrorHandler
@@ -9,12 +12,14 @@ from db.models import Candidates, Brands, Offices
 
 from router.candidates_router import candidates_router
 
+load_dotenv()
+
 app = FastAPI()
 
 app.add_middleware(ErrorHandler)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[os.getenv('CORS_HOST')],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
